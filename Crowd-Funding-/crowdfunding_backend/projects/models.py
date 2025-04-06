@@ -32,6 +32,8 @@ class Project(models.Model):
     end_time = models.DateTimeField()
     image = models.ImageField(upload_to="images/", default="blank.jpg")
     slug = models.SlugField(unique=True, blank=True)
+    is_active = models.BooleanField(default=True)
+
 
     def save(self, *args, **kwargs):
         if not self.slug:
@@ -54,3 +56,34 @@ class Donation(models.Model):
 
     def __str__(self):
         return f"{self.user.username} donated {self.amount} to {self.project.title}"
+    
+class Comment(models.Model):
+    project = models.ForeignKey(Project, on_delete=models.CASCADE, related_name="comments") 
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE) 
+    text = models.TextField() 
+    created_at = models.DateTimeField(auto_now_add=True) 
+    parent = models.ForeignKey( "self", null=True, blank=True, on_delete=models.CASCADE, related_name="replies" )
+    def __str__(self):
+        return f"{self.user.username} on {self.project.title}"
+    
+class Report(models.Model): 
+    REPORT_TYPE_CHOICES = [ ("project", "Project"), ("comment", "Comment"), ]
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    project = models.ForeignKey(Project, null=True, blank=True, on_delete=models.CASCADE)
+    comment = models.ForeignKey(Comment, null=True, blank=True, on_delete=models.CASCADE)
+    report_type = models.CharField(max_length=20, choices=REPORT_TYPE_CHOICES)
+    reason = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.user.username} reported {self.report_type}"
+
+class Rating(models.Model): 
+    project = models.ForeignKey(Project, on_delete=models.CASCADE, related_name="ratings") 
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE) 
+    value = models.PositiveSmallIntegerField() # typically 1 to 5  
+    class Meta:
+        unique_together = ("project", "user")
+    def __str__(self):
+        return f"{self.user.username} rated {self.project.title} - {self.value}"
+  
