@@ -9,8 +9,8 @@ class User(AbstractUser):
     mobile_phone=models.CharField(max_length=11,
                                  unique=True,
                                  validators=[RegexValidator(regex=r'^01[0-2,5]{1}[0-9]{8}$',
-                                                            message="Enter a valid Egyptian phone number (e.g., +201012345678)"
-                                                            )]
+                                  message="Enter a valid Egyptian phone number (e.g., +201012345678)"
+                                 )]
                                  )
     profile_picture=models.ImageField(upload_to='profiles/',null=True,blank=True)
     is_activiated=models.BooleanField(default=False)
