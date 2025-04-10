@@ -40,13 +40,13 @@ INSTALLED_APPS = [
     "rest_framework",
     "rest_framework_simplejwt",
     "rest_framework.authtoken",
-    "dj_rest_auth",
-    'django.contrib.sites',
-    "allauth",
-    "allauth.account",
-    "allauth.socialaccount",
-    "allauth.socialaccount.providers.facebook",  # Facebook Login
-    "corsheaders",
+    # "dj_rest_auth",
+    # 'django.contrib.sites',
+    # "allauth",
+    # "allauth.account",
+    # "allauth.socialaccount",
+    # "allauth.socialaccount.providers.facebook",  # Facebook Login
+    # "corsheaders",
 
     "accounts.apps.AccountsConfig",
 
